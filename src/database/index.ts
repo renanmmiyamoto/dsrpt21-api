@@ -3,7 +3,6 @@ import dotenv from 'dotenv-safe';
 
 dotenv.config();
 
-// @ts-ignore
 mongoose.connect(
   'mongodb+srv://admin:medness123@cluster0.7tjsj.mongodb.net/DSRPT21?retryWrites=true&w=majority',
   {
