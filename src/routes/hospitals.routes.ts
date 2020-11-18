@@ -9,9 +9,9 @@ hospitalsRouter.get('/', async (req, res) => {
   try {
     const hospitals = await HospitalModel.find();
 
-    return res.send(hospitals);
+    return res.json(hospitals);
   } catch (error) {
-    return res.status(error.statusCode).send({ error: error.message });
+    return res.status(error.statusCode).json({ error: error.message });
   }
 });
 
@@ -21,9 +21,9 @@ hospitalsRouter.get('/:hospitalId', async (req, res) => {
 
     const hospital = await hospitalService.getHospital(req.params.hospitalId);
 
-    return res.send(hospital);
+    return res.json(hospital);
   } catch (error) {
-    return res.status(error.statusCode).send({ error: error.message });
+    return res.status(error.statusCode).json({ error: error.message });
   }
 });
 
@@ -33,9 +33,9 @@ hospitalsRouter.post('/', async (req, res) => {
 
     const hospital = await hospitalService.createHospital(req.body);
 
-    return res.send(hospital);
+    return res.json(hospital);
   } catch (error) {
-    return res.status(400).send({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 });
 
@@ -45,9 +45,9 @@ hospitalsRouter.delete('/:hospitalId', async (req, res) => {
 
     const hospital = await hospitalService.deleteHospital(req.body);
 
-    return res.send(hospital);
+    return res.json(hospital);
   } catch (error) {
-    return res.status(400).send({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 });
 

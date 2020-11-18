@@ -9,9 +9,9 @@ usersRouter.get('/', async (req, res) => {
   try {
     const users = await UserModel.find();
 
-    return res.send(users);
+    return res.json(users);
   } catch (error) {
-    return res.status(error.statusCode).send({ error: error.message });
+    return res.status(error.statusCode).json({ error: error.message });
   }
 });
 
@@ -21,9 +21,9 @@ usersRouter.get('/:userId', async (req, res) => {
 
     const user = await userService.getUser(req.params.userId);
 
-    return res.send(user);
+    return res.json(user);
   } catch (error) {
-    return res.status(error.statusCode).send({ error: error.message });
+    return res.status(error.statusCode).json({ error: error.message });
   }
 });
 
@@ -33,9 +33,9 @@ usersRouter.post('/', async (req, res) => {
 
     const user = await userService.createUser(req.body);
 
-    return res.send(user);
+    return res.json(user);
   } catch (error) {
-    return res.status(400).send({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 });
 
@@ -45,9 +45,9 @@ usersRouter.get('/:userId', async (req, res) => {
 
     const user = await userService.deleteUser(req.params.userId);
 
-    return res.send(user);
+    return res.json(user);
   } catch (error) {
-    return res.status(error.statusCode).send({ error: error.message });
+    return res.status(error.statusCode).json({ error: error.message });
   }
 });
 

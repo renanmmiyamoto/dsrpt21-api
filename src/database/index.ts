@@ -3,11 +3,15 @@ import dotenv from 'dotenv-safe';
 
 dotenv.config();
 
-export default function connect(): Promise<typeof mongoose> {
-  // @ts-ignore
-  return mongoose.connect(process.env.MONGO_URI, {
+// @ts-ignore
+mongoose.connect(
+  'mongodb+srv://admin:medness123@cluster0.7tjsj.mongodb.net/DSRPT21?retryWrites=true&w=majority',
+  {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-  });
-}
+  },
+);
+mongoose.Promise = global.Promise;
+
+export default mongoose;

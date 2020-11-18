@@ -1,13 +1,13 @@
-import { model, Schema, Document } from 'mongoose';
+import mongoose from '../../database';
 
-export interface IHospital extends Document {
+export interface IHospital extends mongoose.Document {
   name: string;
   address: string;
   cep: string;
   distance: string;
 }
 
-const HospitalSchema = new Schema({
+const HospitalSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -28,4 +28,4 @@ const HospitalSchema = new Schema({
   },
 });
 
-export default model<IHospital>('Hospital', HospitalSchema);
+export default mongoose.model<IHospital>('Hospital', HospitalSchema);
