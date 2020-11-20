@@ -1,3 +1,5 @@
+import { hash } from 'bcryptjs';
+
 import AppError from '../../errors/AppError';
 import UserModel, { IUser } from './UserModel';
 
@@ -26,9 +28,15 @@ class UserService {
 
     const userExists = await UserModel.findOne({ email });
 
-    if (userExists) throw new AppError('User already exists.');
+    if (userExists) throw new AppError('Email address already in use.');
 
-    const newUser = await UserModel.create({ name, email, password });
+    const hashedPassword = await hash(password, 8);
+
+    const newUser = await UserModel.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
 
     return newUser;
   }

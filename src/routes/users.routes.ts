@@ -5,50 +5,30 @@ import UserService from '../modules/user/UserService';
 
 const usersRouter = Router();
 
-usersRouter.get('/', async (req, res) => {
-  try {
-    const users = await UserModel.find();
+const userService = new UserService();
 
-    return res.json(users);
-  } catch (error) {
-    return res.status(error.statusCode).json({ error: error.message });
-  }
+usersRouter.get('/', async (req, res) => {
+  const users = await UserModel.find();
+
+  return res.send(users);
 });
 
 usersRouter.get('/:userId', async (req, res) => {
-  try {
-    const userService = new UserService();
+  const user = await userService.getUser(req.params.userId);
 
-    const user = await userService.getUser(req.params.userId);
-
-    return res.json(user);
-  } catch (error) {
-    return res.status(error.statusCode).json({ error: error.message });
-  }
+  return res.send(user);
 });
 
 usersRouter.post('/', async (req, res) => {
-  try {
-    const userService = new UserService();
+  const user = await userService.createUser(req.body);
 
-    const user = await userService.createUser(req.body);
-
-    return res.json(user);
-  } catch (error) {
-    return res.status(400).json({ error: error.message });
-  }
+  return res.send(user);
 });
 
-usersRouter.get('/:userId', async (req, res) => {
-  try {
-    const userService = new UserService();
+usersRouter.delete('/:userId', async (req, res) => {
+  const user = await userService.deleteUser(req.params.userId);
 
-    const user = await userService.deleteUser(req.params.userId);
-
-    return res.json(user);
-  } catch (error) {
-    return res.status(error.statusCode).json({ error: error.message });
-  }
+  return res.send(user);
 });
 
 export default usersRouter;
