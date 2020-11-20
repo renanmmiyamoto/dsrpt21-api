@@ -21,8 +21,7 @@ class HospitalService {
 
   public async createHospital(hospital: Request): Promise<IHospital> {
     for (let i = 0; i < Object.keys(hospital).length; i++) {
-      if (!Object.keys(hospital)[i])
-        throw new AppError('All fields are required.');
+      if (!Object.keys(hospital)[i]) throw new AppError('All fields are required.');
     }
 
     const { name, address, cep, distance } = hospital;
