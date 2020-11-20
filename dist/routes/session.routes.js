@@ -40,52 +40,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
-var UserModel_1 = __importDefault(require("../modules/user/UserModel"));
-var UserService_1 = __importDefault(require("../modules/user/UserService"));
-var usersRouter = express_1.Router();
-var userService = new UserService_1.default();
-usersRouter.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, UserModel_1.default.find()];
+var SessionService_1 = __importDefault(require("../modules/sessions/SessionService"));
+var sessionRouter = express_1.Router();
+sessionRouter.post('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, sessionService, _b, user, token;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = req.body, email = _a.email, password = _a.password;
+                sessionService = new SessionService_1.default();
+                return [4 /*yield*/, sessionService.authenticateUser({
+                        email: email,
+                        password: password,
+                    })];
             case 1:
-                users = _a.sent();
-                return [2 /*return*/, res.send(users)];
+                _b = _c.sent(), user = _b.user, token = _b.token;
+                // @ts-ignore
+                user.password = undefined;
+                return [2 /*return*/, res.send({ user: user, token: token })];
         }
     });
 }); });
-usersRouter.get('/:userId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, userService.getUser(req.params.userId)];
-            case 1:
-                user = _a.sent();
-                return [2 /*return*/, res.send(user)];
-        }
-    });
-}); });
-usersRouter.post('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, userService.createUser(req.body)];
-            case 1:
-                user = _a.sent();
-                return [2 /*return*/, res.send(user)];
-        }
-    });
-}); });
-usersRouter.delete('/:userId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, userService.deleteUser(req.params.userId)];
-            case 1:
-                user = _a.sent();
-                return [2 /*return*/, res.send(user)];
-        }
-    });
-}); });
-exports.default = usersRouter;
+exports.default = sessionRouter;

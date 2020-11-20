@@ -40,77 +40,53 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
+var ensureAuthenticated_1 = __importDefault(require("../middlewares/ensureAuthenticated"));
 var HospitalModel_1 = __importDefault(require("../modules/hospital/HospitalModel"));
 var HospitalService_1 = __importDefault(require("../modules/hospital/HospitalService"));
 var hospitalsRouter = express_1.Router();
+var hospitalService = new HospitalService_1.default();
+hospitalsRouter.use(ensureAuthenticated_1.default);
 hospitalsRouter.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var hospitals, error_1;
+    var hospitals;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, HospitalModel_1.default.find()];
+            case 0: return [4 /*yield*/, HospitalModel_1.default.find()];
             case 1:
                 hospitals = _a.sent();
-                return [2 /*return*/, res.json(hospitals)];
-            case 2:
-                error_1 = _a.sent();
-                return [2 /*return*/, res.status(error_1.statusCode).json({ error: error_1.message })];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/, res.send(hospitals)];
         }
     });
 }); });
 hospitalsRouter.get('/:hospitalId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var hospitalService, hospital, error_2;
+    var hospital;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                hospitalService = new HospitalService_1.default();
-                return [4 /*yield*/, hospitalService.getHospital(req.params.hospitalId)];
+            case 0: return [4 /*yield*/, hospitalService.getHospital(req.params.hospitalId)];
             case 1:
                 hospital = _a.sent();
-                return [2 /*return*/, res.json(hospital)];
-            case 2:
-                error_2 = _a.sent();
-                return [2 /*return*/, res.status(error_2.statusCode).json({ error: error_2.message })];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/, res.send(hospital)];
         }
     });
 }); });
 hospitalsRouter.post('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var hospitalService, hospital, error_3;
+    var hospital;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                hospitalService = new HospitalService_1.default();
-                return [4 /*yield*/, hospitalService.createHospital(req.body)];
+            case 0: return [4 /*yield*/, hospitalService.createHospital(req.body)];
             case 1:
                 hospital = _a.sent();
-                return [2 /*return*/, res.json(hospital)];
-            case 2:
-                error_3 = _a.sent();
-                return [2 /*return*/, res.status(400).json({ error: error_3.message })];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/, res.send(hospital)];
         }
     });
 }); });
 hospitalsRouter.delete('/:hospitalId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var hospitalService, hospital, error_4;
+    var hospital;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                hospitalService = new HospitalService_1.default();
-                return [4 /*yield*/, hospitalService.deleteHospital(req.body)];
+            case 0: return [4 /*yield*/, hospitalService.deleteHospital(req.body)];
             case 1:
                 hospital = _a.sent();
-                return [2 /*return*/, res.json(hospital)];
-            case 2:
-                error_4 = _a.sent();
-                return [2 /*return*/, res.status(400).json({ error: error_4.message })];
-            case 3: return [2 /*return*/];
+                return [2 /*return*/, res.send(hospital)];
         }
     });
 }); });

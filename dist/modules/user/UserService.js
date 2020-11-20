@@ -39,6 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var bcryptjs_1 = require("bcryptjs");
 var AppError_1 = __importDefault(require("../../errors/AppError"));
 var UserModel_1 = __importDefault(require("./UserModel"));
 var UserService = /** @class */ (function () {
@@ -64,7 +65,7 @@ var UserService = /** @class */ (function () {
     };
     UserService.prototype.createUser = function (user) {
         return __awaiter(this, void 0, void 0, function () {
-            var name, email, password, userExists, newUser;
+            var name, email, password, userExists, hashedPassword, newUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -75,9 +76,16 @@ var UserService = /** @class */ (function () {
                     case 1:
                         userExists = _a.sent();
                         if (userExists)
-                            throw new AppError_1.default('User already exists.');
-                        return [4 /*yield*/, UserModel_1.default.create({ name: name, email: email, password: password })];
+                            throw new AppError_1.default('Email address already in use.');
+                        return [4 /*yield*/, bcryptjs_1.hash(password, 8)];
                     case 2:
+                        hashedPassword = _a.sent();
+                        return [4 /*yield*/, UserModel_1.default.create({
+                                name: name,
+                                email: email,
+                                password: hashedPassword,
+                            })];
+                    case 3:
                         newUser = _a.sent();
                         return [2 /*return*/, newUser];
                 }

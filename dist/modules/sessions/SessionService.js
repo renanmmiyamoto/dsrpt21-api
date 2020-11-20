@@ -39,53 +39,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var UserModel_1 = __importDefault(require("../modules/user/UserModel"));
-var UserService_1 = __importDefault(require("../modules/user/UserService"));
-var usersRouter = express_1.Router();
-var userService = new UserService_1.default();
-usersRouter.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, UserModel_1.default.find()];
-            case 1:
-                users = _a.sent();
-                return [2 /*return*/, res.send(users)];
-        }
-    });
-}); });
-usersRouter.get('/:userId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, userService.getUser(req.params.userId)];
-            case 1:
-                user = _a.sent();
-                return [2 /*return*/, res.send(user)];
-        }
-    });
-}); });
-usersRouter.post('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, userService.createUser(req.body)];
-            case 1:
-                user = _a.sent();
-                return [2 /*return*/, res.send(user)];
-        }
-    });
-}); });
-usersRouter.delete('/:userId', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, userService.deleteUser(req.params.userId)];
-            case 1:
-                user = _a.sent();
-                return [2 /*return*/, res.send(user)];
-        }
-    });
-}); });
-exports.default = usersRouter;
+var bcryptjs_1 = require("bcryptjs");
+var jsonwebtoken_1 = require("jsonwebtoken");
+var AppError_1 = __importDefault(require("../../errors/AppError"));
+var UserModel_1 = __importDefault(require("../user/UserModel"));
+var auth_1 = __importDefault(require("../../config/auth"));
+var SessionService = /** @class */ (function () {
+    function SessionService() {
+    }
+    SessionService.prototype.authenticateUser = function (_a) {
+        var email = _a.email, password = _a.password;
+        return __awaiter(this, void 0, void 0, function () {
+            var user, passwordMatched, _b, secret, expiresIn, token;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, UserModel_1.default.findOne({ email: email })];
+                    case 1:
+                        user = _c.sent();
+                        if (!user)
+                            throw new AppError_1.default('Incorrect email/password combination.', 401);
+                        return [4 /*yield*/, bcryptjs_1.compare(password, user.password)];
+                    case 2:
+                        passwordMatched = _c.sent();
+                        if (!passwordMatched)
+                            throw new AppError_1.default('Incorrect email/password combination.', 401);
+                        _b = auth_1.default.jwt, secret = _b.secret, expiresIn = _b.expiresIn;
+                        token = jsonwebtoken_1.sign({}, secret, {
+                            subject: user.id,
+                            expiresIn: expiresIn,
+                        });
+                        return [2 /*return*/, { user: user, token: token }];
+                }
+            });
+        });
+    };
+    return SessionService;
+}());
+exports.default = SessionService;
